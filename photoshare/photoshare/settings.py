@@ -77,6 +77,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Enforce 2-user cap via adapter (set in views)
 SOCIALACCOUNT_ADAPTER = 'photos.adapters.DuoSnapSocialAccountAdapter'
+ACCOUNT_ADAPTER = 'photos.adapters.DuoSnapAccountAdapter'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

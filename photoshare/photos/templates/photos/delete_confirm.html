@@ -7,130 +7,107 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:             #f4f5f7;
-      --surface:        #ffffff;
-      --border:         #e2e5ea;
-      --text-primary:   #1a1d23;
-      --text-secondary: #7a8394;
-      --accent:         #4a9e7f;
-      --accent-soft:    #eaf5f0;
-      --danger:         #e05252;
-      --danger-soft:    #fdf0f0;
-      --shadow-md:      0 8px 40px rgba(0,0,0,.10);
-      --radius:         16px;
+      --bg: #f4f6f8; --surface: #ffffff; --border: #e2e6ea;
+      --text: #111827; --muted: #6b7280; --dim: #9ca3af;
+      --accent: #047857; --accent-dim: rgba(4,120,87,.08);
+      --danger: #dc2626; --danger-dim: rgba(220,38,38,.07);
     }
-
     body {
-      background: var(--bg);
-      font-family: 'Poppins', sans-serif;
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: var(--bg); font-family: 'Poppins', sans-serif;
+      color: var(--text); min-height: 100vh; display: flex; flex-direction: column;
     }
 
     .topbar {
-      display: flex; align-items: center; padding: 18px 32px;
-      background: var(--surface); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 16px 32px; background: var(--surface);
+      border-bottom: 1px solid var(--border);
     }
-    .topbar-brand {
-      display: flex; align-items: center; gap: 9px;
-      text-decoration: none; color: var(--text-primary);
-    }
-    .brand-icon {
-      width: 28px; height: 28px; background: var(--accent);
-      border-radius: 8px; display: flex; align-items: center; justify-content: center;
-    }
-    .brand-name { font-size: .9rem; font-weight: 600; }
-    .brand-name span { color: var(--accent); }
+    .topbar-brand { text-decoration: none; display: flex; align-items: center; }
+    .brand-logo { height: 48px; width: auto; }
 
     .page {
-      flex: 1; display: flex;
-      align-items: center; justify-content: center; padding: 48px 20px;
+      flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 20px;
     }
 
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-md);
-      width: 100%; max-width: 400px;
-      overflow: hidden;
-      opacity: 0;
-      transform: scale(.97) translateY(14px);
+      background: var(--surface); border: 1px solid var(--border);
+      box-shadow: 0 4px 24px rgba(0,0,0,.07);
+      width: 100%; max-width: 400px; overflow: hidden;
+      opacity: 0; transform: scale(.97) translateY(14px);
       animation: popIn .4s .08s cubic-bezier(.25,.46,.45,.94) forwards;
+      position: relative;
     }
+    .card::before, .card::after {
+      content: ''; position: absolute; width: 16px; height: 16px; z-index: 2;
+    }
+    .card::before { top: -1px; left: -1px; border-top: 2px solid var(--danger); border-left: 2px solid var(--danger); }
+    .card::after  { bottom: -1px; right: -1px; border-bottom: 2px solid var(--danger); border-right: 2px solid var(--danger); }
 
     .card-preview { height: 200px; overflow: hidden; line-height: 0; position: relative; }
-    .card-preview img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.82); display: block; }
+    .card-preview img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.85) saturate(.7); display: block; }
     .card-preview-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, rgba(10,12,20,.5));
+      background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,.5));
     }
 
-    .card-body { padding: 26px 26px 24px; }
+    .card-body { padding: 24px 24px 22px; }
 
     .badge-danger {
       display: inline-flex; align-items: center; gap: 5px;
-      background: var(--danger-soft); color: var(--danger);
-      font-size: .66rem; font-weight: 600; letter-spacing: .09em;
+      background: var(--danger-dim); color: var(--danger);
+      font-size: .6rem; font-weight: 600; letter-spacing: .12em;
       text-transform: uppercase; padding: 4px 10px;
-      border-radius: 20px; margin-bottom: 14px;
+      border: 1px solid rgba(220,38,38,.2); margin-bottom: 14px;
     }
 
-    .card-title { font-size: .95rem; font-weight: 600; margin-bottom: 6px; }
-    .card-subtitle { font-size: .8rem; color: var(--text-secondary); line-height: 1.6; }
+    .card-title { font-size: .95rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .card-subtitle { font-size: .78rem; color: var(--muted); line-height: 1.6; }
 
     .uploader-note {
       display: flex; align-items: center; gap: 7px;
       margin-top: 14px; padding: 10px 12px;
-      background: var(--bg); border-radius: 8px;
-      font-size: .75rem; color: var(--text-secondary);
+      background: var(--bg); border: 1px solid var(--border);
+      font-size: .72rem; color: var(--muted);
     }
     .avatar {
-      width: 20px; height: 20px; border-radius: 50%;
-      background: var(--accent); color: #fff;
-      font-size: .55rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      text-transform: uppercase; flex-shrink: 0;
+      width: 18px; height: 18px; background: var(--accent); color: #fff;
+      font-size: .52rem; font-weight: 700; display: flex; align-items: center;
+      justify-content: center; text-transform: uppercase; flex-shrink: 0;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     }
-    .avatar.partner { background: #6db89a; }
+    .avatar.partner { background: #94a3b8; }
 
-    .card-actions { display: flex; gap: 10px; margin-top: 22px; }
+    .card-actions { display: flex; gap: 8px; margin-top: 20px; }
 
     .btn {
-      flex: 1; padding: 11px; border-radius: 10px;
-      font-family: inherit; font-size: .82rem; font-weight: 500;
-      cursor: pointer; border: none; text-align: center; text-decoration: none;
-      display: inline-flex; align-items: center; justify-content: center;
-      transition: background .18s, transform .15s;
+      flex: 1; padding: 10px; font-family: inherit; font-size: .72rem; font-weight: 600;
+      cursor: pointer; border: 1px solid var(--border); text-align: center;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+      letter-spacing: .06em; text-transform: uppercase; transition: all .18s;
     }
-    .btn-cancel {
-      background: var(--bg); border: 1px solid var(--border); color: var(--text-secondary);
-    }
-    .btn-cancel:hover { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+    .btn-cancel { background: transparent; color: var(--muted); }
+    .btn-cancel:hover { color: var(--accent); border-color: rgba(4,120,87,.3); background: var(--accent-dim); }
     .btn-delete {
-      background: var(--danger); color: #fff;
-      box-shadow: 0 2px 10px rgba(224,82,82,.22);
+      background: var(--danger-dim); color: var(--danger);
+      border-color: rgba(220,38,38,.25);
     }
-    .btn-delete:hover { background: #c93a3a; transform: translateY(-1px); }
+    .btn-delete:hover { background: rgba(220,38,38,.16); }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--dim); }
+    * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 
     @keyframes popIn { to { opacity: 1; transform: scale(1) translateY(0); } }
   </style>
 </head>
 <body>
-
   <header class="topbar">
     <a href="{% url 'gallery' %}" class="topbar-brand">
-      <div class="brand-icon">
-        <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
-          <path d="M9 3.5C7 3.5 5.5 5 5.5 7S7 10.5 9 10.5 12.5 9 12.5 7 11 3.5 9 3.5Z" fill="white" opacity=".9"/>
-          <path d="M3 14.5c0-2.5 2.7-4 6-4s6 1.5 6 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="brand-name">Duo<span>Snap</span></div>
+      {% load static %}
+      <img src="{% static 'images/duosnap logo.png' %}" alt="DuoSnap" class="brand-logo">
     </a>
   </header>
 
@@ -142,25 +119,23 @@
       </div>
       <div class="card-body">
         <div class="badge-danger">
-          <svg width="10" height="10" viewBox="0 0 11 11" fill="none"><path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg width="9" height="9" viewBox="0 0 11 11" fill="none"><path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
           Delete
         </div>
         <div class="card-title">Remove this memory?</div>
         <div class="card-subtitle">
           "{{ photo.description }}" will be permanently removed from your shared timeline.
         </div>
-
         <div class="uploader-note">
           <div class="avatar {% if photo.uploaded_by != request.user %}partner{% endif %}">
             {{ photo.uploaded_by.username|slice:":1"|default:"?" }}
           </div>
-          Added by <strong>&nbsp;{{ photo.uploaded_by.username|default:"Unknown" }}</strong>
+          Added by <strong style="color:var(--text);margin-left:3px;">{{ photo.uploaded_by.username|default:"Unknown" }}</strong>
           &nbsp;· {{ photo.created_at|date:"F j, Y" }}
         </div>
-
         <div class="card-actions">
           <a href="{% url 'photo' photo.id %}" class="btn btn-cancel">Cancel</a>
-          <form method="POST" action="" style="flex:1; display:flex;">
+          <form method="POST" action="" style="flex:1;display:flex;">
             {% csrf_token %}
             <button type="submit" class="btn btn-delete" style="flex:1;">Delete forever</button>
           </form>
@@ -168,6 +143,5 @@
       </div>
     </div>
   </div>
-
 </body>
 </html>

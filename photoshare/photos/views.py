@@ -19,31 +19,32 @@ def login_view(request):
         if user:
             login(request, user)
             return redirect('gallery')
-        messages.error(request, 'Invalid username or password.')
+        return render(request, 'photos/login.html', {'error': 'Invalid username or password.'})
     return render(request, 'photos/login.html')
 
 
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('gallery')
-    # Only 2 users allowed — the couple
-    if User.objects.count() >= 2:
-        return render(request, 'photos/register.html', {'full': True})
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()
         password2 = request.POST.get('password2', '').strip()
-        if not username or not password:
-            messages.error(request, 'Please fill in all fields.')
+        error = None
+        if User.objects.count() >= 2:
+            error = 'This space is already full. Only 2 accounts are allowed.'
+        elif not username or not password:
+            error = 'Please fill in all fields.'
         elif password != password2:
-            messages.error(request, 'Passwords do not match.')
+            error = 'Passwords do not match.'
         elif User.objects.filter(username=username).exists():
-            messages.error(request, 'That username is already taken.')
+            error = 'That username is already taken.'
         else:
             user = User.objects.create_user(username=username, password=password)
             login(request, user)
             return redirect('gallery')
-    return render(request, 'photos/register.html', {'full': False})
+        return render(request, 'photos/register.html', {'error': error, 'username': username})
+    return render(request, 'photos/register.html', {})
 
 
 def logout_view(request):

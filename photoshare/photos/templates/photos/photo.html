@@ -7,191 +7,107 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:             #f4f5f7;
-      --surface:        #ffffff;
-      --border:         #e2e5ea;
-      --text-primary:   #1a1d23;
-      --text-secondary: #7a8394;
-      --accent:         #4a9e7f;
-      --accent-soft:    #eaf5f0;
-      --danger:         #e05252;
-      --shadow-md:      0 6px 32px rgba(0,0,0,.10);
-      --radius:         16px;
+      --bg: #f4f6f8; --surface: #ffffff; --border: #e2e6ea;
+      --text: #111827; --muted: #6b7280; --dim: #9ca3af;
+      --accent: #047857; --accent-dim: rgba(4,120,87,.08); --accent-glow: rgba(4,120,87,.2);
+      --danger: #dc2626; --danger-dim: rgba(220,38,38,.08);
     }
-
     body {
-      background: var(--bg);
-      font-family: 'Poppins', sans-serif;
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: var(--bg); font-family: 'Poppins', sans-serif;
+      color: var(--text); min-height: 100vh; display: flex; flex-direction: column;
     }
 
     .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 32px;
-      background: var(--surface);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px; background: var(--surface);
       border-bottom: 1px solid var(--border);
-      opacity: 0;
-      animation: fadeDown .4s .05s forwards;
+      opacity: 0; animation: fadeDown .4s .04s forwards;
     }
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      text-decoration: none;
-      color: var(--text-primary);
-    }
-    .brand-icon {
-      width: 28px; height: 28px;
-      background: var(--accent);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .brand-name { font-size: .9rem; font-weight: 600; }
-    .brand-name span { color: var(--accent); }
-
+    .topbar-brand { text-decoration: none; display: flex; align-items: center; }
+    .brand-logo { height: 48px; width: auto; }
     .topbar-actions { display: flex; gap: 8px; }
+
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      border-radius: 9px;
-      font-family: inherit;
-      font-size: .78rem;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      border: none;
-      transition: background .18s, transform .15s;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px; font-family: inherit; font-size: .72rem;
+      font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      cursor: pointer; text-decoration: none; border: 1px solid var(--border);
+      transition: all .18s;
     }
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-    }
-    .btn-ghost:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-soft); }
-    .btn-danger {
-      background: var(--danger);
-      color: #fff;
-      box-shadow: 0 2px 8px rgba(224,82,82,.2);
-    }
-    .btn-danger:hover { background: #c93a3a; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--muted); }
+    .btn-ghost:hover { color: var(--accent); border-color: rgba(4,120,87,.3); background: var(--accent-dim); }
+    .btn-danger { background: var(--danger-dim); color: var(--danger); border-color: rgba(220,38,38,.3); }
+    .btn-danger:hover { background: rgba(220,38,38,.16); }
 
     .stage {
-      flex: 1;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 44px 32px 60px;
-      gap: 32px;
+      flex: 1; display: flex; align-items: flex-start; justify-content: center;
+      padding: 48px 32px 60px; gap: 32px;
     }
-
     .photo-wrapper {
-      max-width: 720px;
-      width: 100%;
-      opacity: 0;
-      transform: scale(.97) translateY(14px);
-      animation: zoomIn .5s .15s cubic-bezier(.25,.46,.45,.94) forwards;
+      max-width: 800px; width: 100%;
+      opacity: 0; transform: scale(.97) translateY(16px);
+      animation: zoomIn .5s .1s cubic-bezier(.25,.46,.45,.94) forwards;
     }
 
     .photo-frame {
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-      line-height: 0;
+      position: relative; overflow: hidden; line-height: 0;
       border: 1px solid var(--border);
     }
+    .photo-frame::before, .photo-frame::after {
+      content: ''; position: absolute; width: 22px; height: 22px; z-index: 2;
+    }
+    .photo-frame::before { top: 10px; left: 10px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+    .photo-frame::after  { bottom: 10px; right: 10px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); }
     .photo-frame img {
-      width: 100%;
-      max-height: 65vh;
-      object-fit: contain;
-      background: #eef0f3;
-      display: block;
+      width: 100%; max-height: 68vh; object-fit: contain;
+      background: var(--bg); display: block;
     }
 
     .photo-info {
-      margin-top: 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
+      margin-top: 2px; background: var(--surface);
+      border: 1px solid var(--border); border-top: none;
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
     }
-    .info-left {}
-    .info-uploader {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 5px;
-    }
+    .info-left { display: flex; flex-direction: column; gap: 4px; }
+    .info-uploader { display: flex; align-items: center; gap: 7px; }
     .avatar {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
-      font-size: .6rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-transform: uppercase;
-      flex-shrink: 0;
+      width: 20px; height: 20px; background: var(--accent); color: #fff;
+      font-size: .58rem; font-weight: 700; display: flex; align-items: center;
+      justify-content: center; text-transform: uppercase; flex-shrink: 0;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     }
-    .avatar.partner { background: #6db89a; }
-    .uploader-name { font-size: .78rem; font-weight: 500; color: var(--accent); }
-    .photo-desc { font-size: .9rem; color: var(--text-primary); font-weight: 400; }
+    .avatar.partner { background: #94a3b8; color: #fff; }
+    .uploader-name { font-size: .72rem; font-weight: 600; color: var(--accent); letter-spacing: .04em; text-transform: uppercase; }
+    .photo-desc { font-size: .88rem; color: var(--text); }
     .info-right { text-align: right; }
-    .info-category {
-      font-size: .68rem;
-      font-weight: 600;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 3px;
-    }
-    .info-date { font-size: .78rem; color: var(--text-secondary); }
+    .info-category { font-size: .6rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin-bottom: 3px; }
+    .info-date { font-size: .72rem; color: var(--muted); }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--dim); }
+    * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 
     @keyframes fadeDown { to { opacity: 1; } }
     @keyframes zoomIn { to { opacity: 1; transform: scale(1) translateY(0); } }
-
-    @media (max-width: 640px) {
-      .topbar { padding: 14px 18px; }
-      .stage { padding: 28px 16px 40px; }
-    }
   </style>
 </head>
 <body>
-
   <header class="topbar">
     <a href="{% url 'gallery' %}" class="topbar-brand">
-      <div class="brand-icon">
-        <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
-          <path d="M9 3.5C7 3.5 5.5 5 5.5 7S7 10.5 9 10.5 12.5 9 12.5 7 11 3.5 9 3.5Z" fill="white" opacity=".9"/>
-          <path d="M3 14.5c0-2.5 2.7-4 6-4s6 1.5 6 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="brand-name">Duo<span>Snap</span></div>
+      {% load static %}
+      <img src="{% static 'images/duosnap logo.png' %}" alt="DuoSnap" class="brand-logo">
     </a>
     <div class="topbar-actions">
       <a href="{% url 'gallery' %}" class="btn btn-ghost">
-        <svg width="12" height="12" viewBox="0 0 13 13" fill="none"><path d="M8 1L3 6.5 8 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="11" height="11" viewBox="0 0 13 13" fill="none"><path d="M8 1L3 6.5 8 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Back
       </a>
       <a href="{% url 'delete' photo.id %}" class="btn btn-danger">
-        <svg width="12" height="12" viewBox="0 0 13 13" fill="none"><path d="M2 3.5h9M5 3.5V2.5a1 1 0 012 0v1M5.5 6v4M7.5 6v4M3 3.5l.6 7a1 1 0 001 .9h3.8a1 1 0 001-.9l.6-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="11" height="11" viewBox="0 0 13 13" fill="none"><path d="M2 3.5h9M5 3.5V2.5a1 1 0 012 0v1M5.5 6v4M7.5 6v4M3 3.5l.6 7a1 1 0 001 .9h3.8a1 1 0 001-.9l.6-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Delete
       </a>
     </div>
@@ -199,7 +115,7 @@
 
   <div class="stage">
     <div class="photo-wrapper">
-      <div class="photo-frame">
+      <div class="photo-frame" id="frame">
         <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
       </div>
       <div class="photo-info">
@@ -221,22 +137,19 @@
   </div>
 
   <script>
-    const frame = document.querySelector('.photo-frame');
+    const frame = document.getElementById('frame');
     const stage = document.querySelector('.stage');
     stage.addEventListener('mousemove', (e) => {
       const rect = frame.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) / rect.width;
-      const dy = (e.clientY - cy) / rect.height;
-      frame.style.transform = `perspective(900px) rotateY(${dx * 3}deg) rotateX(${-dy * 2.5}deg)`;
+      const dx = (e.clientX - rect.left - rect.width / 2) / rect.width;
+      const dy = (e.clientY - rect.top - rect.height / 2) / rect.height;
+      frame.style.transform = `perspective(1000px) rotateY(${dx * 4}deg) rotateX(${-dy * 3}deg)`;
       frame.style.transition = 'transform .1s';
     });
     stage.addEventListener('mouseleave', () => {
-      frame.style.transform = 'perspective(900px) rotateY(0) rotateX(0)';
-      frame.style.transition = 'transform .5s ease';
+      frame.style.transform = 'perspective(1000px) rotateY(0) rotateX(0)';
+      frame.style.transition = 'transform .6s ease';
     });
   </script>
-
 </body>
 </html>

@@ -9,24 +9,23 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:             #f4f5f7;
-      --surface:        #ffffff;
-      --border:         #e2e5ea;
-      --text-primary:   #1a1d23;
-      --text-secondary: #7a8394;
-      --accent:         #4a9e7f;
-      --accent-soft:    #eaf5f0;
-      --danger:         #e05252;
-      --shadow-sm:      0 1px 4px rgba(0,0,0,.06);
-      --shadow-md:      0 4px 24px rgba(0,0,0,.09);
-      --radius:         14px;
-      --sidebar:        260px;
+      --bg:       #f4f6f8;
+      --surface:  #ffffff;
+      --border:   #e2e6ea;
+      --text:     #111827;
+      --muted:    #6b7280;
+      --dim:      #9ca3af;
+      --accent:   #047857;
+      --accent-dim: rgba(4,120,87,.08);
+      --accent-glow: rgba(4,120,87,.2);
+      --danger:   #dc2626;
+      --sidebar:  240px;
     }
 
     body {
       background: var(--bg);
       font-family: 'Poppins', sans-serif;
-      color: var(--text-primary);
+      color: var(--text);
       min-height: 100vh;
     }
 
@@ -39,7 +38,7 @@
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      padding: 32px 22px 28px;
+      padding: 28px 20px 24px;
       position: sticky;
       top: 0;
       height: 100vh;
@@ -48,66 +47,93 @@
     }
 
     .brand {
+      display: block;
+      text-align: center;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+    .brand-logo { width: 170px; height: auto; display: inline-block; }
+
+    .sb-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 20px;
+    }
+
+    /* Users section */
+    .users-section { margin-bottom: 24px; }
+    .users-label {
+      font-size: .58rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .users-label::before {
+      content: '';
+      width: 3px; height: 3px;
+      background: var(--accent);
+      display: inline-block;
+      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    }
+    .user-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 32px;
+      padding: 7px 10px;
+      margin-bottom: 4px;
+      border: 1px solid transparent;
+      transition: border-color .18s, background .18s;
     }
-    .brand-icon {
-      width: 32px; height: 32px;
-      background: var(--accent);
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .brand-name { font-size: 1rem; font-weight: 600; letter-spacing: -.01em; }
-    .brand-name span { color: var(--accent); }
-
-    /* Couple pill */
-    .couple-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-soft);
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 28px;
-    }
+    .user-row:hover { border-color: var(--border); background: var(--accent-dim); }
     .avatar {
       width: 26px; height: 26px;
-      border-radius: 50%;
       background: var(--accent);
       color: #fff;
-      font-size: .65rem;
-      font-weight: 600;
+      font-size: .62rem;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
       text-transform: uppercase;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     }
-    .avatar.partner { background: #6db89a; margin-left: -8px; border: 2px solid var(--surface); }
-    .couple-names {
-      font-size: .75rem;
+    .avatar.partner { background: #94a3b8; color: #fff; }
+    .user-info { min-width: 0; }
+    .user-name {
+      font-size: .72rem;
       font-weight: 500;
-      color: var(--accent);
-      line-height: 1.3;
-      flex: 1;
-      min-width: 0;
+      color: var(--text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .user-tag { font-size: .58rem; color: var(--accent); letter-spacing: .04em; }
+    .partner-tag { color: var(--muted); }
 
-    .sidebar-label {
-      font-size: .65rem;
+    /* Nav */
+    .nav-label {
+      font-size: .58rem;
       font-weight: 600;
-      letter-spacing: .12em;
+      letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
+      color: var(--dim);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-label::before {
+      content: '';
+      width: 3px; height: 3px;
+      background: var(--accent);
+      display: inline-block;
+      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
     }
 
     .cat-list { list-style: none; flex: 1; }
@@ -115,31 +141,39 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 10px;
-      border-radius: 8px;
+      padding: 7px 10px;
       text-decoration: none;
-      font-size: .8rem;
+      font-size: .78rem;
       font-weight: 400;
-      color: var(--text-secondary);
-      transition: background .18s, color .18s;
+      color: var(--muted);
+      border-left: 2px solid transparent;
+      transition: color .18s, border-color .18s, background .18s;
+      letter-spacing: .01em;
     }
-    .cat-list li a:hover, .cat-list li a.active {
-      background: var(--accent-soft);
+    .cat-list li a:hover {
+      color: var(--text);
+      background: var(--accent-dim);
+      border-left-color: var(--border);
+    }
+    .cat-list li a.active {
       color: var(--accent);
+      border-left-color: var(--accent);
+      background: var(--accent-dim);
     }
     .cat-list li a .bullet {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--border);
+      width: 4px; height: 4px;
+      background: currentColor;
       flex-shrink: 0;
-      transition: background .18s;
+      opacity: .5;
+      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+      transition: opacity .18s;
     }
-    .cat-list li a:hover .bullet,
-    .cat-list li a.active .bullet { background: var(--accent); }
+    .cat-list li a.active .bullet,
+    .cat-list li a:hover .bullet { opacity: 1; }
 
     .sidebar-footer {
       margin-top: auto;
-      padding-top: 20px;
+      padding-top: 16px;
       border-top: 1px solid var(--border);
       display: flex;
       flex-direction: column;
@@ -155,208 +189,296 @@
       background: var(--accent);
       color: #fff;
       border: none;
-      border-radius: 10px;
       font-family: inherit;
-      font-size: .8rem;
-      font-weight: 500;
+      font-size: .75rem;
+      font-weight: 600;
       cursor: pointer;
       text-decoration: none;
-      transition: background .18s, transform .15s, box-shadow .18s;
-      box-shadow: 0 2px 10px rgba(74,158,127,.28);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      transition: background .18s, box-shadow .18s;
+      box-shadow: 0 2px 16px var(--accent-glow);
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
     }
-    .btn-add:hover {
-      background: #3a8a6c;
-      transform: translateY(-1px);
-    }
+    .btn-add:hover { background: #065f46; box-shadow: 0 4px 20px rgba(4,120,87,.35); }
 
     .btn-logout {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 9px 16px;
+      padding: 8px 16px;
       background: transparent;
-      color: var(--text-secondary);
+      color: var(--muted);
       border: 1px solid var(--border);
-      border-radius: 10px;
       font-family: inherit;
-      font-size: .8rem;
+      font-size: .75rem;
       font-weight: 400;
       cursor: pointer;
       text-decoration: none;
-      transition: background .18s, color .18s;
+      letter-spacing: .03em;
+      transition: color .18s, border-color .18s;
     }
-    .btn-logout:hover {
-      background: #fdf0f0;
-      color: var(--danger);
-      border-color: transparent;
-    }
+    .btn-logout:hover { color: var(--danger); border-color: rgba(220,38,38,.35); }
 
     /* ── Main ── */
     .main {
       flex: 1;
-      padding: 44px 40px 60px;
+      background: var(--bg);
       min-width: 0;
+      display: flex;
+      flex-direction: column;
     }
 
-    .main-header {
-      margin-bottom: 36px;
+    .main-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 36px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
       opacity: 0;
-      transform: translateY(12px);
-      animation: fadeUp .5s .05s forwards;
+      animation: fadeDown .4s .05s forwards;
     }
-    .main-header h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -.02em; }
-    .main-header p { font-size: .82rem; color: var(--text-secondary); margin-top: 3px; }
+    .topbar-left { display: flex; flex-direction: column; gap: 2px; }
+    .topbar-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -.01em;
+    }
+    .topbar-title span { color: var(--accent); }
+    .topbar-sub {
+      font-size: .7rem;
+      color: var(--dim);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .topbar-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: .72rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+    .topbar-stat-num {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 32px 36px 60px;
+      overflow-y: auto;
+    }
 
     /* ── Timeline ── */
-    .month-group { margin-bottom: 44px; }
+    .month-group { margin-bottom: 48px; }
     .month-group:last-child { margin-bottom: 0; }
 
     .month-label {
-      font-size: .72rem;
+      font-size: .62rem;
       font-weight: 600;
-      letter-spacing: .12em;
+      letter-spacing: .16em;
       text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 16px;
+      color: var(--accent);
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       opacity: 0;
       animation: fadeUp .4s forwards;
+    }
+    .month-label::before {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--accent);
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      flex-shrink: 0;
     }
     .month-label::after {
       content: '';
       flex: 1;
       height: 1px;
-      background: var(--border);
+      background: linear-gradient(90deg, var(--border), transparent);
     }
 
     .photo-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 2px;
     }
 
     .photo-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      overflow: hidden;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      opacity: 0;
-      transform: translateY(18px);
-      transition: box-shadow .22s, transform .22s;
-    }
-    .photo-card.visible { animation: fadeUp .42s forwards; }
-    .photo-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-3px);
-    }
-
-    .card-img-wrap {
       position: relative;
       overflow: hidden;
-      height: 185px;
+      aspect-ratio: 4/3;
+      opacity: 0;
+      transform: scale(.97);
+      transition: transform .3s, z-index 0s;
+      cursor: pointer;
     }
-    .card-img-wrap img {
+    .photo-card.visible { animation: zoomIn .4s forwards; }
+    .photo-card:hover { transform: scale(1); z-index: 2; }
+
+    .photo-card img {
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform .4s ease;
+      transition: transform .5s ease, filter .3s;
+      filter: brightness(.95) saturate(.95);
     }
-    .photo-card:hover .card-img-wrap img { transform: scale(1.04); }
+    .photo-card:hover img {
+      transform: scale(1.06);
+      filter: brightness(1) saturate(1.05);
+    }
+
+    /* corner bracket on hover */
+    .photo-card::before, .photo-card::after {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      z-index: 3;
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .photo-card::before {
+      top: 8px; left: 8px;
+      border-top: 2px solid var(--accent);
+      border-left: 2px solid var(--accent);
+    }
+    .photo-card::after {
+      bottom: 8px; right: 8px;
+      border-bottom: 2px solid var(--accent);
+      border-right: 2px solid var(--accent);
+    }
+    .photo-card:hover::before,
+    .photo-card:hover::after { opacity: 1; }
 
     .card-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(10,12,20,.52) 0%, transparent 55%);
+      background: linear-gradient(to top, rgba(0,0,0,.65) 0%, rgba(0,0,0,.15) 50%, transparent 100%);
       opacity: 0;
-      transition: opacity .25s;
+      transition: opacity .3s;
+      z-index: 1;
     }
     .photo-card:hover .card-overlay { opacity: 1; }
 
+    .card-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 14px 14px 12px;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .28s, transform .28s;
+    }
+    .photo-card:hover .card-info { opacity: 1; transform: translateY(0); }
+
+    .card-desc {
+      font-size: .78rem;
+      font-weight: 500;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 6px;
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-uploader {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .62rem;
+      color: #a7f3d0;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .uploader-dot {
+      width: 5px; height: 5px;
+      background: #a7f3d0;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
+    .uploader-dot.partner-dot { background: #cbd5e1; }
+    .card-date { font-size: .62rem; color: rgba(255,255,255,.5); letter-spacing: .04em; }
+
     .overlay-actions {
       position: absolute;
-      bottom: 10px;
-      left: 0; right: 0;
+      top: 10px; right: 10px;
       display: flex;
-      justify-content: center;
-      gap: 7px;
+      gap: 5px;
+      z-index: 3;
       opacity: 0;
-      transform: translateY(5px);
+      transform: translateY(-4px);
       transition: opacity .25s, transform .25s;
     }
     .photo-card:hover .overlay-actions { opacity: 1; transform: translateY(0); }
 
     .oa-btn {
-      padding: 5px 14px;
-      border-radius: 7px;
+      padding: 4px 10px;
       font-family: inherit;
-      font-size: .73rem;
-      font-weight: 500;
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
       cursor: pointer;
       border: none;
       text-decoration: none;
-      transition: background .15s;
+      transition: background .15s, color .15s;
     }
-    .oa-view { background: rgba(255,255,255,.93); color: var(--text-primary); }
-    .oa-view:hover { background: #fff; }
-    .oa-delete { background: rgba(224,82,82,.88); color: #fff; }
-    .oa-delete:hover { background: var(--danger); }
-
-    .card-body { padding: 11px 13px 13px; }
-    .card-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 3px;
-    }
-    .card-uploader {
-      font-size: .68rem;
-      font-weight: 600;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .uploader-dot {
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: var(--accent);
+    .oa-view {
+      background: rgba(255,255,255,.15);
       color: #fff;
-      font-size: .5rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,.3);
+      backdrop-filter: blur(4px);
     }
-    .uploader-dot.partner-dot { background: #6db89a; }
-    .card-date { font-size: .65rem; color: var(--text-secondary); }
-    .card-desc {
-      font-size: .8rem;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .oa-view:hover { background: rgba(255,255,255,.28); }
+    .oa-delete {
+      background: rgba(220,38,38,.15);
+      color: #fca5a5;
+      border: 1px solid rgba(220,38,38,.35);
+      backdrop-filter: blur(4px);
     }
+    .oa-delete:hover { background: rgba(220,38,38,.3); }
 
     .empty-state {
-      text-align: center;
-      padding: 80px 20px;
-      color: var(--text-secondary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px;
       opacity: 0;
       animation: fadeUp .5s .2s forwards;
     }
-    .empty-state .icon { margin-bottom: 12px; display: block; opacity: .3; line-height: 0; }
-    .empty-state p { font-size: .875rem; }
+    .empty-state svg { margin-bottom: 16px; color: var(--dim); }
+    .empty-state p { font-size: .82rem; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
 
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeDown { to { opacity: 1; } }
+    @keyframes zoomIn { to { opacity: 1; transform: scale(1); } }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--dim); }
+    * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 
     @media (max-width: 768px) {
       .sidebar { display: none; }
-      .main { padding: 28px 18px 48px; }
+      .main-content { padding: 20px 16px 48px; }
+      .main-topbar { padding: 14px 16px; }
     }
   </style>
 </head>
@@ -366,28 +488,37 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-icon">
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-          <path d="M9 3.5C7 3.5 5.5 5 5.5 7S7 10.5 9 10.5 12.5 9 12.5 7 11 3.5 9 3.5Z" fill="white" opacity=".9"/>
-          <path d="M3 14.5c0-2.5 2.7-4 6-4s6 1.5 6 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="brand-name">Duo<span>Snap</span></div>
-    </div>
+    {% load static %}
+    <a href="{% url 'gallery' %}" class="brand">
+      <img src="{% static 'images/duosnap logo.png' %}" alt="DuoSnap" class="brand-logo">
+    </a>
 
-    <!-- Couple pill -->
-    <div class="couple-pill">
-      <div class="avatar">{{ request.user.username|slice:":1" }}</div>
+    <div class="sb-divider"></div>
+
+    <!-- Users -->
+    <div class="users-section">
+      <div class="users-label">Users</div>
+      <div class="user-row">
+        <div class="avatar">{{ request.user.username|slice:":1" }}</div>
+        <div class="user-info">
+          <div class="user-name">{{ request.user.username }}</div>
+          <div class="user-tag">you</div>
+        </div>
+      </div>
       {% if partner %}
-      <div class="avatar partner">{{ partner.username|slice:":1" }}</div>
-      {% endif %}
-      <div class="couple-names">
-        {{ request.user.username }}{% if partner %} &amp; {{ partner.username }}{% endif %}
+      <div class="user-row">
+        <div class="avatar partner">{{ partner.username|slice:":1" }}</div>
+        <div class="user-info">
+          <div class="user-name">{{ partner.username }}</div>
+          <div class="user-tag partner-tag">partner</div>
+        </div>
       </div>
+      {% endif %}
     </div>
 
-    <div class="sidebar-label">Collections</div>
+    <div class="sb-divider"></div>
+
+    <div class="nav-label">Collections</div>
     <ul class="cat-list">
       <li><a href="{% url 'gallery' %}" {% if not category_filter %}class="active"{% endif %}>
         <span class="bullet"></span> All Memories
@@ -402,11 +533,11 @@
 
     <div class="sidebar-footer">
       <a href="{% url 'add' %}" class="btn-add">
-        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         Add Memory
       </a>
       <a href="{% url 'logout' %}" class="btn-logout">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M5 2H2.5A1.5 1.5 0 001 3.5v6A1.5 1.5 0 002.5 11H5M8.5 9.5L12 6.5 8.5 3.5M12 6.5H5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="12" height="12" viewBox="0 0 13 13" fill="none"><path d="M5 2H2.5A1.5 1.5 0 001 3.5v6A1.5 1.5 0 002.5 11H5M8.5 9.5L12 6.5 8.5 3.5M12 6.5H5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Sign out
       </a>
     </div>
@@ -414,53 +545,60 @@
 
   <!-- Main -->
   <main class="main">
-    <div class="main-header">
-      <h1>{% if category_filter %}{{ category_filter }}{% else %}Our Timeline{% endif %}</h1>
-      <p>{{ total }} memor{% if total != 1 %}ies{% else %}y{% endif %} shared together</p>
+
+    <div class="main-topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">
+          {% if category_filter %}<span>//</span> {{ category_filter }}{% else %}<span>//</span> Our Timeline{% endif %}
+        </div>
+        <div class="topbar-sub">shared memories archive</div>
+      </div>
+      <div class="topbar-stat">
+        <span class="topbar-stat-num">{{ total }}</span>
+        memor{% if total != 1 %}ies{% else %}y{% endif %}
+      </div>
     </div>
 
-    {% if grouped_photos %}
-      {% for month, photos in grouped_photos.items %}
-      <div class="month-group">
-        <div class="month-label" style="animation-delay: .05s;">{{ month }}</div>
-        <div class="photo-grid">
-          {% for photo in photos %}
-          <div class="photo-card" data-index="{{ forloop.counter0 }}">
-            <div class="card-img-wrap">
+    <div class="main-content">
+      {% if grouped_photos %}
+        {% for month, photos in grouped_photos.items %}
+        <div class="month-group">
+          <div class="month-label" style="animation-delay: .05s;">{{ month }}</div>
+          <div class="photo-grid">
+            {% for photo in photos %}
+            <div class="photo-card" data-index="{{ forloop.counter0 }}">
               <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
               <div class="card-overlay"></div>
               <div class="overlay-actions">
                 <a href="{% url 'photo' photo.id %}" class="oa-btn oa-view">View</a>
-                <a href="{% url 'delete' photo.id %}" class="oa-btn oa-delete">Delete</a>
+                <a href="{% url 'delete' photo.id %}" class="oa-btn oa-delete">Del</a>
               </div>
-            </div>
-            <div class="card-body">
-              <div class="card-meta">
-                <div class="card-uploader">
-                  <div class="uploader-dot {% if photo.uploaded_by != request.user %}partner-dot{% endif %}">
-                    {{ photo.uploaded_by.username|slice:":1"|default:"?" }}
+              <div class="card-info">
+                <div class="card-desc">{{ photo.description }}</div>
+                <div class="card-meta">
+                  <div class="card-uploader">
+                    <span class="uploader-dot {% if photo.uploaded_by != request.user %}partner-dot{% endif %}"></span>
+                    {{ photo.uploaded_by.username|default:"?" }}
                   </div>
-                  {{ photo.uploaded_by.username|default:"Unknown" }}
+                  <div class="card-date">{{ photo.created_at|date:"M d, Y" }}</div>
                 </div>
-                <div class="card-date">{{ photo.created_at|date:"M d" }}</div>
               </div>
-              <div class="card-desc">{{ photo.description }}</div>
             </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
-      </div>
-      {% endfor %}
-    {% else %}
-      <div class="empty-state">
-        <span class="icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
           </svg>
-        </span>
-        <p>No memories yet. Add your first one together.</p>
-      </div>
-    {% endif %}
+          <p>No memories yet — add your first one</p>
+        </div>
+      {% endif %}
+    </div>
+
   </main>
 
 </div>
