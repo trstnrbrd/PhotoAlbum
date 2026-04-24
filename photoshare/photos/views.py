@@ -1,25 +1,99 @@
-from django.shortcuts import render,redirect
-from .models import Category,Photo
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from itertools import groupby
+from .models import Category, Photo
 
-# Create your views here.
+
+# ── Auth ──────────────────────────────────────────────
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('gallery')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return redirect('gallery')
+        messages.error(request, 'Invalid username or password.')
+    return render(request, 'photos/login.html')
+
+
+def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('gallery')
+    # Only 2 users allowed — the couple
+    if User.objects.count() >= 2:
+        return render(request, 'photos/register.html', {'full': True})
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '').strip()
+        password2 = request.POST.get('password2', '').strip()
+        if not username or not password:
+            messages.error(request, 'Please fill in all fields.')
+        elif password != password2:
+            messages.error(request, 'Passwords do not match.')
+        elif User.objects.filter(username=username).exists():
+            messages.error(request, 'That username is already taken.')
+        else:
+            user = User.objects.create_user(username=username, password=password)
+            login(request, user)
+            return redirect('gallery')
+    return render(request, 'photos/register.html', {'full': False})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
+# ── Gallery / Timeline ────────────────────────────────
+
+@login_required(login_url='login')
 def gallery(request):
-    category = request.GET.get('category')
-    if category == None:
-        photos=Photo.objects.all()
+    category_filter = request.GET.get('category')
+    if category_filter:
+        photos = Photo.objects.filter(category__name=category_filter).select_related('uploaded_by', 'category')
     else:
-        photos=Photo.objects.filter(category__name=category)
-        
+        photos = Photo.objects.all().select_related('uploaded_by', 'category')
 
-    categories=Category.objects.all()
-    
+    # Group by month-year for timeline
+    grouped = {}
+    for photo in photos:
+        key = photo.created_at.strftime('%B %Y')
+        grouped.setdefault(key, []).append(photo)
 
-    context = {'categories': categories, 'photos': photos}
-    return render(request,'photos/gallery.html',context)
+    categories = Category.objects.all()
 
+    # Get partner
+    partner = User.objects.exclude(id=request.user.id).first()
+
+    context = {
+        'grouped_photos': grouped,
+        'categories': categories,
+        'partner': partner,
+        'category_filter': category_filter,
+        'total': photos.count(),
+    }
+    return render(request, 'photos/gallery.html', context)
+
+
+# ── Photo Detail ──────────────────────────────────────
+
+@login_required(login_url='login')
 def viewPhoto(request, pk):
-    photo=Photo.objects.get(id=pk)
-    return render(request,'photos/photo.html', {'photo': photo})
+    photo = get_object_or_404(Photo, id=pk)
+    partner = User.objects.exclude(id=request.user.id).first()
+    return render(request, 'photos/photo.html', {'photo': photo, 'partner': partner})
 
+
+# ── Add Photo ─────────────────────────────────────────
+
+@login_required(login_url='login')
 def addPhoto(request):
     categories = Category.objects.all()
 
@@ -29,18 +103,31 @@ def addPhoto(request):
 
         if data['category'] != 'none':
             category = Category.objects.get(id=data['category'])
-        elif data['category_new'] != '':
-            category, created = Category.objects.get_or_create(name=data['category_new'])
+        elif data.get('category_new', '').strip():
+            category, _ = Category.objects.get_or_create(name=data['category_new'].strip())
         else:
             category = None
 
-        photo = Photo.objects.create(
-                category=category,
-                description=data['description'],
-                image=image,
-            )
-
+        Photo.objects.create(
+            category=category,
+            description=data['description'],
+            image=image,
+            uploaded_by=request.user,
+        )
         return redirect('gallery')
 
-    context = {'categories': categories}
-    return render(request, 'photos/add.html', context)
+    partner = User.objects.exclude(id=request.user.id).first()
+    return render(request, 'photos/add.html', {'categories': categories, 'partner': partner})
+
+
+# ── Delete Photo ──────────────────────────────────────
+
+@login_required(login_url='login')
+def deletePhoto(request, pk):
+    photo = get_object_or_404(Photo, id=pk)
+    partner = User.objects.exclude(id=request.user.id).first()
+    if request.method == 'POST':
+        photo.image.delete(save=False)
+        photo.delete()
+        return redirect('gallery')
+    return render(request, 'photos/delete_confirm.html', {'photo': photo, 'partner': partner})

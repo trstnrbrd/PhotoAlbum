@@ -1,124 +1,484 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DuoSnap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #175725 0%, #2575fc 100%);
-            font-family: 'Montserrat', sans-serif;
-            color: #fff; 
-        }
-        .container {
-            margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.9); 
-            border-radius: 15px; 
-            padding: 20px; 
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
-        }
-        .card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s; 
-        }
-        .card:hover {
-            transform: scale(1.05); 
-        }
-        .image-thumbnail {
-            height: 220px;
-            object-fit: cover;
-            border-radius: 15px 15px 0 0;
-        }
-        .list-group-item a {
-            text-decoration: none;
-            color: #495057;
-        }
-        .list-group-item a:hover {
-            color: #007bff; 
-        }
-        .btn-success {
-            background-color: #28a745; 
-            border: none;
-        }
-        .btn-success:hover {
-            background-color: #218838; 
-        }
-        h3 {
-            text-align: center;
-            color: #666; 
-        }
-        .card-header {
-            background-color: #1d6b47; 
-            color: white;
-            border-radius: 15px 15px 0 0; 
-        }
-        .card-footer {
-            background-color: #f8f9fa; 
-            border-radius: 0 0 15px 15px; 
-        }
-        .category-title {
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-        h1{
-          margin-left: 300px;
-        }
-    </style>
+    :root {
+      --bg:             #f4f5f7;
+      --surface:        #ffffff;
+      --border:         #e2e5ea;
+      --text-primary:   #1a1d23;
+      --text-secondary: #7a8394;
+      --accent:         #4a9e7f;
+      --accent-soft:    #eaf5f0;
+      --danger:         #e05252;
+      --shadow-sm:      0 1px 4px rgba(0,0,0,.06);
+      --shadow-md:      0 4px 24px rgba(0,0,0,.09);
+      --radius:         14px;
+      --sidebar:        260px;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 32px 22px 28px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .brand-icon {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .brand-name { font-size: 1rem; font-weight: 600; letter-spacing: -.01em; }
+    .brand-name span { color: var(--accent); }
+
+    /* Couple pill */
+    .couple-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-soft);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 28px;
+    }
+    .avatar {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+    .avatar.partner { background: #6db89a; margin-left: -8px; border: 2px solid var(--surface); }
+    .couple-names {
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--accent);
+      line-height: 1.3;
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-label {
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .cat-list { list-style: none; flex: 1; }
+    .cat-list li a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: .8rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      transition: background .18s, color .18s;
+    }
+    .cat-list li a:hover, .cat-list li a.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .cat-list li a .bullet {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+      transition: background .18s;
+    }
+    .cat-list li a:hover .bullet,
+    .cat-list li a.active .bullet { background: var(--accent); }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-add {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: .8rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .18s, transform .15s, box-shadow .18s;
+      box-shadow: 0 2px 10px rgba(74,158,127,.28);
+    }
+    .btn-add:hover {
+      background: #3a8a6c;
+      transform: translateY(-1px);
+    }
+
+    .btn-logout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 16px;
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: .8rem;
+      font-weight: 400;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .18s, color .18s;
+    }
+    .btn-logout:hover {
+      background: #fdf0f0;
+      color: var(--danger);
+      border-color: transparent;
+    }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      padding: 44px 40px 60px;
+      min-width: 0;
+    }
+
+    .main-header {
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp .5s .05s forwards;
+    }
+    .main-header h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -.02em; }
+    .main-header p { font-size: .82rem; color: var(--text-secondary); margin-top: 3px; }
+
+    /* ── Timeline ── */
+    .month-group { margin-bottom: 44px; }
+    .month-group:last-child { margin-bottom: 0; }
+
+    .month-label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp .4s forwards;
+    }
+    .month-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .photo-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: box-shadow .22s, transform .22s;
+    }
+    .photo-card.visible { animation: fadeUp .42s forwards; }
+    .photo-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .card-img-wrap {
+      position: relative;
+      overflow: hidden;
+      height: 185px;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .4s ease;
+    }
+    .photo-card:hover .card-img-wrap img { transform: scale(1.04); }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,12,20,.52) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .photo-card:hover .card-overlay { opacity: 1; }
+
+    .overlay-actions {
+      position: absolute;
+      bottom: 10px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity .25s, transform .25s;
+    }
+    .photo-card:hover .overlay-actions { opacity: 1; transform: translateY(0); }
+
+    .oa-btn {
+      padding: 5px 14px;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: .73rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: background .15s;
+    }
+    .oa-view { background: rgba(255,255,255,.93); color: var(--text-primary); }
+    .oa-view:hover { background: #fff; }
+    .oa-delete { background: rgba(224,82,82,.88); color: #fff; }
+    .oa-delete:hover { background: var(--danger); }
+
+    .card-body { padding: 11px 13px 13px; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+    .card-uploader {
+      font-size: .68rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .uploader-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: .5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+    }
+    .uploader-dot.partner-dot { background: #6db89a; }
+    .card-date { font-size: .65rem; color: var(--text-secondary); }
+    .card-desc {
+      font-size: .8rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-secondary);
+      opacity: 0;
+      animation: fadeUp .5s .2s forwards;
+    }
+    .empty-state .icon { margin-bottom: 12px; display: block; opacity: .3; line-height: 0; }
+    .empty-state p { font-size: .875rem; }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { padding: 28px 18px 48px; }
+    }
+  </style>
 </head>
 <body>
 
-  <h1>MY ALBUM</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0 category-title">Categories</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a href="{% url 'gallery' %}">All</a>
-                        </li>
-                        {% for category in categories %}
-                        <li class="list-group-item">
-                            <a href="{% url 'gallery' %}?category={{category.name}}">
-                                {{category.name}}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    <div class="card-body">
-                        <a href="{% url 'add' %}" class="btn btn-success btn-block">Add Photo</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="row">
-                    {% for photo in photos %}
-                    <div class="col-md-4">  
-                        <div class="card my-2">
-                            <img class="image-thumbnail " src="{{photo.image.url}}" alt="Card image cap">
-                            <div class="card-body">
-                                <small>Category: {{photo.category.name}}</small>
-                            </div>
-                            <div class="card-footer text-center">
-                                <a href="{% url 'photo' photo.id %}" class="btn btn-outline-dark">View</a>
-                            </div>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <h3>No Photos...</h3>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+          <path d="M9 3.5C7 3.5 5.5 5 5.5 7S7 10.5 9 10.5 12.5 9 12.5 7 11 3.5 9 3.5Z" fill="white" opacity=".9"/>
+          <path d="M3 14.5c0-2.5 2.7-4 6-4s6 1.5 6 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="brand-name">Duo<span>Snap</span></div>
     </div>
-    
+
+    <!-- Couple pill -->
+    <div class="couple-pill">
+      <div class="avatar">{{ request.user.username|slice:":1" }}</div>
+      {% if partner %}
+      <div class="avatar partner">{{ partner.username|slice:":1" }}</div>
+      {% endif %}
+      <div class="couple-names">
+        {{ request.user.username }}{% if partner %} &amp; {{ partner.username }}{% endif %}
+      </div>
+    </div>
+
+    <div class="sidebar-label">Collections</div>
+    <ul class="cat-list">
+      <li><a href="{% url 'gallery' %}" {% if not category_filter %}class="active"{% endif %}>
+        <span class="bullet"></span> All Memories
+      </a></li>
+      {% for category in categories %}
+      <li><a href="{% url 'gallery' %}?category={{ category.name }}"
+             {% if category_filter == category.name %}class="active"{% endif %}>
+        <span class="bullet"></span> {{ category.name }}
+      </a></li>
+      {% endfor %}
+    </ul>
+
+    <div class="sidebar-footer">
+      <a href="{% url 'add' %}" class="btn-add">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Add Memory
+      </a>
+      <a href="{% url 'logout' %}" class="btn-logout">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M5 2H2.5A1.5 1.5 0 001 3.5v6A1.5 1.5 0 002.5 11H5M8.5 9.5L12 6.5 8.5 3.5M12 6.5H5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sign out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="main-header">
+      <h1>{% if category_filter %}{{ category_filter }}{% else %}Our Timeline{% endif %}</h1>
+      <p>{{ total }} memor{% if total != 1 %}ies{% else %}y{% endif %} shared together</p>
+    </div>
+
+    {% if grouped_photos %}
+      {% for month, photos in grouped_photos.items %}
+      <div class="month-group">
+        <div class="month-label" style="animation-delay: .05s;">{{ month }}</div>
+        <div class="photo-grid">
+          {% for photo in photos %}
+          <div class="photo-card" data-index="{{ forloop.counter0 }}">
+            <div class="card-img-wrap">
+              <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
+              <div class="card-overlay"></div>
+              <div class="overlay-actions">
+                <a href="{% url 'photo' photo.id %}" class="oa-btn oa-view">View</a>
+                <a href="{% url 'delete' photo.id %}" class="oa-btn oa-delete">Delete</a>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <div class="card-uploader">
+                  <div class="uploader-dot {% if photo.uploaded_by != request.user %}partner-dot{% endif %}">
+                    {{ photo.uploaded_by.username|slice:":1"|default:"?" }}
+                  </div>
+                  {{ photo.uploaded_by.username|default:"Unknown" }}
+                </div>
+                <div class="card-date">{{ photo.created_at|date:"M d" }}</div>
+              </div>
+              <div class="card-desc">{{ photo.description }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <span class="icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </span>
+        <p>No memories yet. Add your first one together.</p>
+      </div>
+    {% endif %}
+  </main>
+
+</div>
+
+<script>
+  const cards = document.querySelectorAll('.photo-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = parseInt(entry.target.dataset.index, 10);
+        entry.target.style.animationDelay = (idx * 0.06) + 's';
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  cards.forEach(c => observer.observe(c));
+</script>
+
 </body>
 </html>
